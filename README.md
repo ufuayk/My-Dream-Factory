@@ -4,15 +4,13 @@ Welcome to **My Dream Factory** — a simulation game where you manage a product
 
 ![Mockup](https://raw.githubusercontent.com/ufuayk/My-Dream-Factory/refs/heads/main/img/mockup.png)
 
-## Developer's Note
-
-My Dream Factory is a simple game prototype that I made just to test my coding skills. And the gameplay is very short. You may find bugs in the game and so on and so forth, I would appreciate it if you don't worry too much about them.
-
-By the way, if you refresh the page, all your progress will be lost :) I'm just saying.
-
-## Responsive Design Note
-
-I didn't have time for responsive design, so I had the AI do it. There may be problems, don't worry too much. :p
+> [!NOTE]
+>
+> My Dream Factory is a simple game prototype that I made just to test my coding skills. And the gameplay is very short. You may find bugs in the game and so on and so forth, I would appreciate it if you don't worry too much about them.
+>
+> I didn't have time for responsive design, so I had the AI do it. There may be problems, don't worry too much. :p
+>
+> By the way, if you refresh the page, all your progress will be lost :) I'm just saying.
 
 ## Features
 
