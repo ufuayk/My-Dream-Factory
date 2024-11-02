@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Dream Factory</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="icon" href="img/favicon.ico">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h3> <i class="fas fa-industry"></i> My Dream Factory</h3>
+            </div>
+            <div class="stats">
+                <div class="stat-box tooltip">
+                    <i class="fas fa-coins"></i>
+                    <div><strong>Money</strong>: $<span id="money">500</span></div>
+                    <span class="tooltiptext">Your total capital including loans.</span>
+                </div>
+                <div class="stat-box tooltip">
+                    <i class="fas fa-star"></i>
+                    <div><strong>Brand Equity</strong>: <span id="brand">0</span></div>
+                    <span class="tooltiptext">High brand equity means high selling prices.</span>
+                </div>
+                <div class="stat-box tooltip">
+                    <i class="fas fa-cogs"></i>
+                    <div><strong>Production Speed</strong>: <span id="production-rate">1</span>/sn</div>
+                    <span class="tooltiptext">The amount of product produced per second.</span>
+                </div>
+                <div class="stat-box tooltip">
+                    <i class="fas fa-chart-line"></i>
+                    <div><strong>Productivity</strong>: <span id="efficiency">100</span>%</div>
+                    <span class="tooltiptext">The efficiency of production depends on employee happiness.</span>
+                </div>
+            </div>
+            <div class="main-grid">
+                <div class="left-panel">
+                    <div class="inventory">
+                        <h3><i class="fas fa-box"></i> Inventory</h3>
+                        <div class="progress-bar">
+                            <div id="raw-materials-bar" class="progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                        <strong>Raw Material</strong>: <span id="raw-materials">0</span> / <span id="max-storage">100</span><br />
+                        <div class="progress-bar">
+                            <div id="products-bar" class="progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                        <strong>Product</strong>: <span id="products">0</span> / <span id="max-products">100</span>
+                    </div>
+                    <div class="bank">
+                        <h3><i class="fas fa-university"></i> Bank Information</h3>
+                        <strong>Credit Limit</strong>: $<span id="credit-limit">5000</span><br />
+                        <strong>Available Credit</strong>: $<span id="current-credit">0</span><br />
+                        <strong>Interest Rate</strong>: %<span id="interest-rate">10</span>
+                    </div>
+                    <div class="actions">
+                        <button class="action-btn" onclick="buyRawMaterials()"><i class="fas fa-shopping-cart"></i> Buy Raw Materials <strong>$50</strong></button>
+                        <button class="action-btn" onclick="sellProducts()"><i class="fas fa-dollar-sign"></i> Sell Products <strong>$$$</strong></button>
+                        <button class="action-btn" onclick="hireWorker()"><i class="fas fa-user-plus"></i> Hire Worker <strong>$200</strong></button>
+                        <button class="action-btn" onclick="hireSalesman()"><i class="fas fa-user-tie"></i> Hire Salesman <strong>$400</strong></button>
+                        <button class="action-btn" onclick="hireMarketer()"><i class="fas fa-bullhorn"></i> Hire Marketer <strong>$300</strong></button>
+                        <button class="action-btn" onclick="runAdvertising()"><i class="fas fa-ad"></i> Run Advertising <strong>$100</strong></button>
+                        <button class="action-btn" onclick="upgradeFactory()"><i class="fas fa-industry"></i> Upgrade Factory <strong>$1000</strong></button>
+                        <button class="action-btn" onclick="upgradeStorage()"><i class="fas fa-warehouse"></i> Upgrade Storage <strong>$500</strong></button>
+                        <button class="action-btn" onclick="takeCredit()"><i class="fas fa-hand-holding-usd"></i> Take Credit <strong>$1000</strong></button>
+                        <button class="action-btn" onclick="payCredit()"><i class="fas fa-money-bill-wave"></i> Pay Credit <strong>$100</strong></button>
+                        <button class="action-btn" onclick="motivateEmployees()"><i class="fas fa-heart"></i> Motivate Employees <strong>$100</strong></button>
+                        <button class="action-btn" onclick="githubLink()"><i class="fas fa-code"></i> <strong>Support the Developer</strong></button>
+                    </div>                    
+                </div>
+                <div class="right-panel">
+                    <div class="employees">
+                        <h3><i class="fas fa-users"></i> Employee List</h3>
+                        <div id="employees-list"></div>
+                    </div>
+
+                    <div class="achievements">
+                        <h3><i class="fas fa-trophy"></i> All Achievements</h3>
+                        <div id="achievements-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="notification" class="notification"></div>
+        <script src="general.js"></script>
+    </body>
+</html>
