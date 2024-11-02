@@ -2,6 +2,8 @@
 
 Welcome to **My Dream Factory** — a simulation game where you manage a production business, optimize operations, and make strategic investments to grow your factory. With a user-friendly interface and engaging gameplay, you can manage employees, resources, finances, and more.
 
+![Mockup](https://raw.githubusercontent.com/ufuayk/My-Dream-Factory/refs/heads/main/img/mockup.png)
+
 ## Developer's Note
 
 My Dream Factory is a simple game prototype that I made just to test my coding skills. And the gameplay is very short. You may find bugs in the game and so on and so forth, I would appreciate it if you don't worry too much about them.
@@ -24,7 +26,7 @@ I didn't have time for responsive design, so I had the AI do it. There may be pr
 
 You can play the game on the web by going to the link below: 
     
-ufuayk.github.io/My-Dream-Factory
+- https://ufuayk.github.io/My-Dream-Factory
 
 ## Technologies
 
