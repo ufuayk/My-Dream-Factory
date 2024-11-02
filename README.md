@@ -47,6 +47,6 @@ Feel free to open an issue or send a pull request.
 
 You can fork and develop the project as you like. You can add new languages, dark themes. You can even solve the problematic responsive design. Thanks in advance for your help.
 
-## License
+## 
 
-[![GPLv3 License](https://img.shields.io/badge/GNU%20General%20Public%20License%20v3-yellow.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![GPLv3 License](https://ziadoua.github.io/m3-Markdown-Badges/badges/LicenceGPLv3/licencegplv31.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
