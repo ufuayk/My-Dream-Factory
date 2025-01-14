@@ -30,7 +30,7 @@ body {
     margin-bottom: 15px;
 }
 .stat-box {
-    background-color: #edf2f7;
+    background-color: #cbd5e0;
     padding: 15px;
     border-radius: 10px;
     text-align: center;
@@ -62,7 +62,7 @@ body {
     padding: 12.1px;
     border: none;
     border-radius: 8px;
-    background-color: #edf2f7;
+    background-color: #cbd5e0;
     color: rgb(0, 0, 0);
     cursor: pointer;
     transition: all 0.3s;
@@ -83,8 +83,17 @@ body {
 .action-btn i {
     font-size: 16px;
 }
+.raw-materials-buttons {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+.raw-materials-buttons .action-btn {
+    flex: 1;
+    margin: 0; 
+}
 .inventory, .employees, .bank {
-    background-color: #edf2f7;
+    background-color: #cbd5e0;
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 15px;
@@ -139,7 +148,7 @@ body {
    }
 }
 .achievements {
-    background-color: #edf2f7;
+    background-color: #cbd5e0;
     padding: 15px;
     border-radius: 10px;
     margin-top: 15px;

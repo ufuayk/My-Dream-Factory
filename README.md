@@ -2,15 +2,15 @@
 
 Welcome to **My Dream Factory** — a simulation game where you manage a production business, optimize operations, and make strategic investments to grow your factory. With a user-friendly interface and engaging gameplay, you can manage employees, resources, finances, and more.
 
-![Mockup](https://raw.githubusercontent.com/ufuayk/My-Dream-Factory/refs/heads/main/img/mockup.png)
+## Developer's Note
 
-> [!NOTE]
->
-> My Dream Factory is a simple game prototype that I made just to test my coding skills. And the gameplay is very short. You may find bugs in the game and so on and so forth, I would appreciate it if you don't worry too much about them.
->
-> I didn't have time for responsive design, so I had the AI do it. There may be problems, don't worry too much. :p
->
-> By the way, if you refresh the page, all your progress will be lost :) I'm just saying.
+My Dream Factory is a simple game prototype that I made just to test my coding skills. And the gameplay is very short. You may find bugs in the game and so on and so forth, I would appreciate it if you don't worry too much about them.
+
+By the way, if you refresh the page, all your progress will be lost :) I'm just saying.
+
+## Responsive Design Note
+
+I didn't have time for responsive design, so I had the AI do it. There may be problems, don't worry too much. :p
 
 ## Features
 
@@ -24,7 +24,7 @@ Welcome to **My Dream Factory** — a simulation game where you manage a product
 
 You can play the game on the web by going to the link below: 
     
-- https://ufuayk.github.io/My-Dream-Factory
+ufuayk.github.io/My-Dream-Factory
 
 ## Technologies
 
@@ -45,6 +45,6 @@ Feel free to open an issue or send a pull request.
 
 You can fork and develop the project as you like. You can add new languages, dark themes. You can even solve the problematic responsive design. Thanks in advance for your help.
 
-## 
+## License
 
-[![GPLv3 License](https://ziadoua.github.io/m3-Markdown-Badges/badges/LicenceGPLv3/licencegplv31.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![GPLv3 License](https://img.shields.io/badge/GNU%20General%20Public%20License%20v3-yellow.svg)](https://www.gnu.org/licenses/gpl-3.0.html)

@@ -54,7 +54,20 @@
                         <strong>Interest Rate</strong>: %<span id="interest-rate">10</span>
                     </div>
                     <div class="actions">
-                        <button class="action-btn" onclick="buyRawMaterials()"><i class="fas fa-shopping-cart"></i> Buy Raw Materials <strong>$50</strong></button>
+                        <div class="raw-materials-buttons">
+                            <button class="action-btn" onclick="buyRawMaterials(10)">
+                                <i class="fas fa-shopping-cart"></i> Buy 10x Raw Materials <strong>$50</strong>
+                            </button>
+                            <button class="action-btn" onclick="buyRawMaterials(50)">
+                                <i class="fas fa-shopping-cart"></i> Buy 50x Raw Materials <strong>$250</strong>
+                            </button>
+                            <button class="action-btn" onclick="buyRawMaterials(100)">
+                                <i class="fas fa-shopping-cart"></i> Buy 100x Raw Materials <strong>$500</strong>
+                            </button>
+                            <button class="action-btn" onclick="buyRawMaterials(1000)">
+                                <i class="fas fa-shopping-cart"></i> Buy 1000x Raw Materials <strong>$5000</strong>
+                            </button>
+                        </div>
                         <button class="action-btn" onclick="sellProducts()"><i class="fas fa-dollar-sign"></i> Sell Products <strong>$$$</strong></button>
                         <button class="action-btn" onclick="hireWorker()"><i class="fas fa-user-plus"></i> Hire Worker <strong>$200</strong></button>
                         <button class="action-btn" onclick="hireSalesman()"><i class="fas fa-user-tie"></i> Hire Salesman <strong>$400</strong></button>

@@ -263,15 +263,21 @@ function checkAchievements() {
     }
     }
     
-    function buyRawMaterials() {
-    if (gameState.money >= 50 && gameState.rawMaterials < gameState.maxStorage) {
-        gameState.money -= 50;
-        gameState.rawMaterials = Math.min(gameState.rawMaterials + 10, gameState.maxStorage);
-        updateUI();
-        showNotification('Raw materials purchased!');
-    } else {
-        showNotification('Not enough money or storage is full!', 'error');
-    }
+    function buyRawMaterials(amount) {
+        const cost = amount * 5;
+        
+        if (gameState.money >= cost) {
+            if (gameState.rawMaterials + amount <= gameState.maxStorage) {
+                gameState.money -= cost;
+                gameState.rawMaterials += amount;
+                updateUI();
+                showNotification(`${amount} raw materials purchased!`, 'success');
+            } else {
+                showNotification('Storage capacity is full!', 'error');
+            }
+        } else {
+            showNotification('Not enough money!', 'error');
+        }
     }
     
     function sellProducts() {
