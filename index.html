@@ -35,6 +35,16 @@
                 <div>Efficiency</div>
                 <div id="efficiency">100%</div>
             </div>
+            <div class="stat-box">
+                <i class="fas fa-chart-line"></i>
+                <div>Market Demand</div>
+                <div id="market-demand">100%</div>
+            </div>
+            <div class="stat-box">
+                <i class="fas fa-calendar-day"></i>
+                <div>Day</div>
+                <div id="day-count">1</div>
+            </div>
         </div>
 
         <div class="main-grid">
@@ -106,6 +116,21 @@
                     <button class="action-btn" onclick="payCredit()">
                         <i class="fas fa-money-bill-wave"></i> Pay Credit ($100)
                     </button>
+                </div>
+
+                <div class="game-controls">
+                    <h4><i class="fas fa-gamepad"></i> Game Controls</h4>
+                    <button class="action-btn" onclick="saveGame()">
+                        <i class="fas fa-save"></i> Save Progress
+                    </button>
+                    <button class="action-btn danger-btn" onclick="resetGame()">
+                        <i class="fas fa-rotate-left"></i> New Game
+                    </button>
+                </div>
+
+                <div class="missions">
+                    <h4><i class="fas fa-flag-checkered"></i> Missions</h4>
+                    <div id="missions-list"></div>
                 </div>
             </div>
         </div>

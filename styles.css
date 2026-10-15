@@ -25,7 +25,7 @@ body {
 }
 .stats {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 15px;
     margin-bottom: 15px;
 }
@@ -92,13 +92,38 @@ body {
     flex: 1;
     margin: 0; 
 }
-.inventory, .employees, .bank {
+.inventory, .employees, .bank, .game-controls, .missions {
     background-color: #cbd5e0;
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 15px;
     padding-top: 1px;
     user-select: none;
+}
+.game-controls .action-btn {
+    width: 100%;
+    margin-bottom: 8px;
+}
+.danger-btn {
+    background-color: #f56565;
+    color: #fff;
+}
+.danger-btn:hover {
+    background-color: #e53e3e;
+}
+.mission {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.6;
+}
+.mission.completed {
+    opacity: 1;
+    border-left: 4px solid #38a169;
 }
 .employee-card {
     background: white;
@@ -199,7 +224,7 @@ body {
 /* Responsive adjustments for tablets and mobile devices */
 @media (max-width: 1024px) {
     .stats {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 
     .main-grid {
@@ -219,7 +244,7 @@ body {
 
 @media (max-width: 768px) {
     .stats {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
     }
 
@@ -247,6 +272,10 @@ body {
 }
 
 @media (max-width: 480px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
     .container {
         padding: 10px;
     }
