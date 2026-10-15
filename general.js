@@ -85,28 +85,140 @@ const ACHIEVEMENTS = [{
     icon: 'fa-heart'
 }];
 
-let gameState = {
-money: 500,
-rawMaterials: 0,
-products: 0,
-workers: [],
-marketers: [],
-salesmen: [],
-brand: 0,
-productionRate: 1,
-baseProductPrice: 10,
-maxStorage: 100,
-maxProducts: 100,
-efficiency: 100,
-credit: 0,
-creditLimit: 5000,
-interestRate: 10,
-achievements: new Set(),
-autoSell: false
-};
+const MISSIONS = [{
+    id: 'shipment-starter',
+    name: 'First Shipment',
+    description: 'Sell 25 products in total.',
+    reward: '+$250 and +1 brand value',
+    isCompleted: (state) => state.totalSold >= 25,
+    onComplete: (state) => {
+        state.money += 250;
+        state.brand += 1;
+    }
+},
+{
+    id: 'brand-rise',
+    name: 'Brand Rising',
+    description: 'Reach brand value 20.',
+    reward: '+$400 and +200 credit limit',
+    isCompleted: (state) => state.brand >= 20,
+    onComplete: (state) => {
+        state.money += 400;
+        state.creditLimit += 200;
+    }
+},
+{
+    id: 'efficient-factory',
+    name: 'Lean Production',
+    description: 'Reach production rate 5/s.',
+    reward: '+$500 and +10% efficiency',
+    isCompleted: (state) => state.productionRate >= 5,
+    onComplete: (state) => {
+        state.money += 500;
+        state.efficiency = Math.min(100, state.efficiency + 10);
+    }
+},
+{
+    id: 'industrial-giant',
+    name: 'Industrial Giant',
+    description: 'Earn $20,000 total capital.',
+    reward: '+$1000 and +2 brand value',
+    isCompleted: (state) => state.money >= 20000,
+    onComplete: (state) => {
+        state.money += 1000;
+        state.brand += 2;
+    }
+}];
+
+const SAVE_KEY = 'myDreamFactorySaveV2';
+
+function createInitialGameState() {
+    return {
+        money: 500,
+        rawMaterials: 0,
+        products: 0,
+        workers: [],
+        marketers: [],
+        salesmen: [],
+        brand: 0,
+        productionRate: 1,
+        baseProductPrice: 10,
+        marketDemand: 1,
+        maxStorage: 100,
+        maxProducts: 100,
+        efficiency: 100,
+        credit: 0,
+        creditLimit: 5000,
+        interestRate: 10,
+        achievements: new Set(),
+        completedMissions: new Set(),
+        autoSell: false,
+        day: 1,
+        totalSold: 0,
+        totalProduced: 0,
+        demandTimer: 0
+    };
+}
+
+let gameState = createInitialGameState();
 
 function formatNumber(num) {
 return Number(num.toFixed(1));
+}
+
+function normalizeEmployee(employee) {
+    return {
+        ...employee,
+        mood: typeof employee.mood === 'number' ? employee.mood : 100,
+        experience: typeof employee.experience === 'number' ? employee.experience : 0
+    };
+}
+
+function saveGame(showMessage = true) {
+    const saveData = {
+        ...gameState,
+        achievements: Array.from(gameState.achievements),
+        completedMissions: Array.from(gameState.completedMissions)
+    };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
+    if (showMessage) {
+        showNotification('Progress saved!', 'success');
+    }
+}
+
+function loadGame() {
+    const rawData = localStorage.getItem(SAVE_KEY);
+    if (!rawData) {
+        return;
+    }
+
+    try {
+        const parsed = JSON.parse(rawData);
+        const initial = createInitialGameState();
+        gameState = {
+            ...initial,
+            ...parsed,
+            workers: (parsed.workers || []).map(normalizeEmployee),
+            marketers: (parsed.marketers || []).map(normalizeEmployee),
+            salesmen: (parsed.salesmen || []).map(normalizeEmployee),
+            achievements: new Set(parsed.achievements || []),
+            completedMissions: new Set(parsed.completedMissions || [])
+        };
+        showNotification('Save loaded successfully!', 'success');
+    } catch (error) {
+        localStorage.removeItem(SAVE_KEY);
+        showNotification('Save data was corrupted and has been reset.', 'error');
+    }
+}
+
+function resetGame() {
+    if (!confirm('Start a new game? This will delete your saved progress.')) {
+        return;
+    }
+    localStorage.removeItem(SAVE_KEY);
+    gameState = createInitialGameState();
+    updateUI();
+    showNotification('New game started!', 'success');
 }
 
 function showNotification(message, type = 'info') {
@@ -139,8 +251,10 @@ $('#efficiency').text(formatNumber(gameState.efficiency));
 $('#max-storage').text(gameState.maxStorage);
 $('#max-products').text(gameState.maxProducts);
 $('#current-credit').text(formatNumber(gameState.credit));
-$('#credit-limit').text(gameState.creditLimit);
+$('#available-credit').text(formatNumber(Math.max(0, gameState.creditLimit - gameState.credit)));
 $('#interest-rate').text(gameState.interestRate);
+$('#market-demand').text(`${formatNumber(gameState.marketDemand * 100)}%`);
+$('#day-count').text(gameState.day);
 
 $('#raw-materials-bar').css('width', `${(gameState.rawMaterials / gameState.maxStorage) * 100}%`);
 $('#products-bar').css('width', `${(gameState.products / gameState.maxProducts) * 100}%`);
@@ -181,6 +295,22 @@ ACHIEVEMENTS.forEach(achievement => {
                 <div>
                     <strong>${achievement.name}</strong><br>
                     <small>${achievement.description}</small>
+                </div>
+            </div>
+        `);
+});
+
+const missionsList = $('#missions-list');
+missionsList.empty();
+MISSIONS.forEach(mission => {
+    const completed = gameState.completedMissions.has(mission.id);
+    missionsList.append(`
+            <div class="mission ${completed ? 'completed' : ''}">
+                <i class="fas ${completed ? 'fa-check-circle' : 'fa-clock'}"></i>
+                <div>
+                    <strong>${mission.name}</strong><br>
+                    <small>${mission.description}</small><br>
+                    <small>Reward: ${mission.reward}</small>
                 </div>
             </div>
         `);
@@ -262,7 +392,53 @@ function checkAchievements() {
         }
     }
     }
-    
+
+function checkMissions() {
+    MISSIONS.forEach(mission => {
+       if (!gameState.completedMissions.has(mission.id) && mission.isCompleted(gameState)) {
+           gameState.completedMissions.add(mission.id);
+           mission.onComplete(gameState);
+           showNotification(`Mission Complete: ${mission.name}`, 'success');
+       }
+    });
+}
+
+function triggerRandomEvent() {
+    const events = [{
+       name: 'Social media trend',
+       effect: () => {
+           gameState.marketDemand = 1.4;
+           gameState.demandTimer = 6;
+           showNotification('A trend boosts demand for 30 seconds!', 'success');
+       }
+    },
+    {
+       name: 'Supplier delay',
+       effect: () => {
+           const loss = Math.floor(gameState.rawMaterials * 0.2);
+           gameState.rawMaterials = Math.max(0, gameState.rawMaterials - loss);
+           showNotification(`Supplier delay! Lost ${loss} raw materials.`, 'error');
+       }
+    },
+    {
+       name: 'Local grant',
+       effect: () => {
+           gameState.money += 300;
+           showNotification('You received a local manufacturing grant (+$300)!', 'success');
+       }
+    },
+    {
+       name: 'Machine wear',
+       effect: () => {
+           gameState.efficiency = Math.max(40, gameState.efficiency - 8);
+           showNotification('Machine wear reduced efficiency.', 'error');
+       }
+    }];
+
+    const randomEvent = events[Math.floor(Math.random() * events.length)];
+    randomEvent.effect();
+}
+     
     function buyRawMaterials(amount) {
         const cost = amount * 5;
         
@@ -282,12 +458,14 @@ function checkAchievements() {
     
     function sellProducts() {
     if (gameState.products >= 1) {
-        let price = gameState.baseProductPrice * (1 + (gameState.brand * 0.1));
+       let price = gameState.baseProductPrice * (1 + (gameState.brand * 0.1)) * gameState.marketDemand;
         let saleAmount = Math.floor(gameState.products);
         gameState.money += saleAmount * price;
         gameState.products -= saleAmount;
-        updateUI();
-        showNotification(`${saleAmount} products sold!`, 'success');
+       gameState.totalSold += saleAmount;
+       checkMissions();
+       updateUI();
+       showNotification(`${saleAmount} products sold!`, 'success');
     }
     }
     
@@ -298,6 +476,7 @@ function checkAchievements() {
         gameState.productionRate += 0.5;
         updateUI();
         checkAchievements();
+        checkMissions();
         showNotification('New worker hired!', 'success');
     }
     }
@@ -307,6 +486,7 @@ function checkAchievements() {
         gameState.money -= 300;
         gameState.marketers.push(createEmployee('Marketer'));
         updateUI();
+        checkMissions();
         showNotification('New marketer hired!', 'success');
     }
     }
@@ -317,6 +497,7 @@ function checkAchievements() {
         gameState.salesmen.push(createEmployee('Salesman'));
         gameState.autoSell = true;
         updateUI();
+        checkMissions();
         showNotification('New salesman hired!', 'success');
     }
     }
@@ -329,6 +510,7 @@ function checkAchievements() {
             employee.mood = Math.min(100, employee.mood + 20);
         });
         gameState.efficiency = Math.min(100, gameState.efficiency + 10);
+        checkMissions();
         updateUI();
         showNotification('Employee morale boosted!', 'success');
     }
@@ -339,6 +521,7 @@ function checkAchievements() {
         gameState.money -= 500;
         gameState.maxStorage += 100;
         gameState.maxProducts += 100;
+        checkMissions();
         updateUI();
         showNotification('Storage capacity increased!', 'success');
     }
@@ -358,6 +541,7 @@ function checkAchievements() {
         const amount = Math.min(1000, gameState.creditLimit - gameState.credit);
         gameState.credit += amount;
         gameState.money += amount;
+        checkMissions();
         updateUI();
         showNotification(`$${amount} credit taken!`);
     } else {
@@ -370,6 +554,7 @@ function checkAchievements() {
         const amount = Math.min(100, Math.min(gameState.credit, gameState.money));
         gameState.credit -= amount;
         gameState.money -= amount;
+        checkMissions();
         updateUI();
         showNotification(`$${amount} credit paid!`, 'success');
     } else {
@@ -383,6 +568,7 @@ function checkAchievements() {
         gameState.brand += 1;
         updateUI();
         checkAchievements();
+        checkMissions();
         showNotification('Advertising campaign started!', 'success');
     }
     }
@@ -391,6 +577,7 @@ function checkAchievements() {
     if (gameState.money >= 1000) {
         gameState.money -= 1000;
         gameState.productionRate *= 1.5;
+        checkMissions();
         updateUI();
         showNotification('Factory upgraded!', 'success');
     }
@@ -407,6 +594,7 @@ if (gameState.rawMaterials > 0 && gameState.workers.length > 0) {
     if (production > 0) {
         gameState.rawMaterials -= production;
         gameState.products += production;
+        gameState.totalProduced += production;
 
         gameState.workers.forEach(worker => {
             worker.experience = Math.min(100, worker.experience + 0.1);
@@ -414,6 +602,7 @@ if (gameState.rawMaterials > 0 && gameState.workers.length > 0) {
 
         updateUI();
         checkAchievements();
+        checkMissions();
     }
 }
 }, 100);
@@ -428,16 +617,18 @@ updateUI();
 
 setInterval(() => {
 if (gameState.autoSell && gameState.salesmen.length > 0 && gameState.products > 0) {
-    let price = gameState.baseProductPrice * (1 + (gameState.brand * 0.1));
+    let price = gameState.baseProductPrice * (1 + (gameState.brand * 0.1)) * gameState.marketDemand;
     let saleAmount = Math.min(gameState.products, gameState.salesmen.length * 2);
     gameState.money += saleAmount * price;
     gameState.products -= saleAmount;
+    gameState.totalSold += saleAmount;
 
     gameState.salesmen.forEach(salesman => {
         salesman.experience = Math.min(100, salesman.experience + 0.1);
     });
 
     updateUI();
+    checkMissions();
 }
 }, 2000);
 
@@ -510,4 +701,29 @@ if (gameState.credit > 0) {
 }
 }, 30000);
 
+setInterval(() => {
+    gameState.day += 1;
+
+    if (gameState.demandTimer > 0) {
+        gameState.demandTimer -= 1;
+        if (gameState.demandTimer <= 0) {
+            gameState.marketDemand = 1;
+            showNotification('Market demand is back to normal.');
+        }
+    } else if (Math.random() < 0.35) {
+        triggerRandomEvent();
+    }
+
+    checkAchievements();
+    checkMissions();
+    updateUI();
+}, 5000);
+
+setInterval(() => {
+    saveGame(false);
+}, 5000);
+
+window.addEventListener('beforeunload', () => saveGame(false));
+
+loadGame();
 updateUI();
